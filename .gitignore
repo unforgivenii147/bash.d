@@ -17,60 +17,80 @@ parts/
 sdist/
 var/
 wheels/
-
 # Virtual Environment
 venv/
 ENV/
 env/
 .venv/
-
 # IDE/Editor settings
 .vscode/
 .idea/
 *.swp
 *.swo
-
 # Pytest
 .cache/
-
 # Jupyter Notebook
 .ipynb_checkpoints
-
 # mypy
 .mypy_cache/
-
 # Pylint
 .pylint.d/
-
 # Coverage reports
 .coverage
 .coverage.*
-
 # tox
 .tox/
-
 # Flake8
 .flake8
-
 # pytest
 .pytest_cache/
-
 # Sphinx
 docs/_build/
-
 # virtualenv
 *.virtualenv/
-
 # .env files (sensitive credentials like API keys)
 .env
 .env.*
-
 # Docker
 docker-compose.override.yml
 Dockerfile*
-
 # macOS
 .DS_Store
-
 # Windows
 Thumbs.db
+*.egg                # Egg distribution files
+*.egg-info/          # Egg metadata
+*.env
+*.log                # Log files
+*.pyc                # Python bytecode
+*.pyo                # Python bytecode
+*.sublime-project    # Sublime Text project file
+*.sublime-workspace  # Sublime Text workspace file
+*.swo                # Vim swap files
+*.swp                # Vim swap files
+*api_key.jdon
+*credential.json
+*token.json
+.DS_Store            # macOS Finder metadata
+.DS_Store            # macOS file metadata
+.idea/               # JetBrains (IntelliJ, PyCharm, etc.)
+.idea/               # JetBrains IDEs like IntelliJ, PyCharm
+.ipynb_checkpoints/
+.venv/               # Virtual environments
+.vscode/             # VS Code settings folder
+Desktop.ini          # Windows desktop configuration file
+Thumbs.db            # Windows file metadata
+Thumbs.db            # Windows image file cache
+__pycache__/         # Python cache directory
+env/                 # Virtual environments
+venv/                # Virtual environments
+# System files
+# IDE and Editor files
+*.sublime-project
+*.sublime-workspace
+# Python-specific
+# Jupyter Notebook checkpoints
+# IDE-specific files (duplicate-safe)
+Desktop.ini
+# Logs
+*.log
