@@ -115,13 +115,14 @@ lu() {
   ls -hla
 }
 pss() {
-  ff="/sdcard/pip.txt.gz"
-  gunzip -v "$ff"
+  ff="/sdcard/pip.txt"
   grep "$@" "$ff"
-  gzip -v "$ff"
 }
 
 mdr() {
+  mkdir -p "$@" && cd "$_"
+}
+mkdr() {
   mkdir -p "$@" && cd "$_"
 }
 
@@ -192,18 +193,18 @@ import dh
 
 def main():
     dir='.'
-    mf=[]
+    filez=[]
     files=dh.get_files(dir)
     for f in files:
         if dh.get_ext(f)=='':
-            mf.append(f)
+            filez.append(f)
             
 
 if __name__ == "__main__":
     sys.exit(main())
 EOF
   chmod +x "$file"
-  echo "Created $file with Python template"
+  echo "$file created"
   #	nano "$file"
 }
 
@@ -212,7 +213,7 @@ g2() {
   # Usage: mygit2 <repo-url> [target-dir]
 
   if [ -z "$1" ]; then
-    echo "Usage: mygit2 <repo-url> [target-dir]"
+    echo "Usage: g2 <repo-url> [target-dir]"
     return 1
   fi
 
@@ -367,4 +368,10 @@ extract() {
   else
     echo "'$1' is not a file"
   fi
+}
+dowhl() {
+  for f in *;do bash -c "cd $f && unzip *.whl && rm -v *.whl";done
+}
+dowhl2() {
+  for f in *;do bash -c "cd $f && ww && rm -rf *";done
 }
