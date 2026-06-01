@@ -1,0 +1,64 @@
+#!/bin/sh
+
+gpp() {
+	g++ -std=c++17 -Wall -Wextra -O2 -fPIE -pie "$@" -o "$@".out
+}
+
+dir() {
+	ls -lF --color=always "$PWD" | less -r
+}
+
+git_clone_master() {
+	gh repo clone "$@" -- --depth 1 --single-branch --branch master
+}
+git_clone_main() {
+	gh repo clone "$@" -- --depth 1 --single-branch --branch main
+}
+
+tally() {
+	sort | uniq -c | sort -n
+}
+
+gif2jpg_with_fgmpeg() {
+	ffmpeg -i "$@" -c vp9 -b:v 0 -crf 41 "$@".jpg
+}
+
+iterpy() {
+	for f in */; do
+		case "$f" in
+		site-packages/) continue ;;
+		esac
+		echo "Processing $f"
+		python -m compileall "$f"
+	done
+}
+
+trr() {
+	local name="$(basename "$PWD")"
+	local archive="../${name}.tar"
+
+	echo "Compressing '$name' into '$archive'..."
+	tar -cvf "$archive" -C .. "$name" || {
+		echo "❌ Compression failed."
+		exit 1
+	}
+
+	cd .. || {
+		echo "❌ Failed to change directory."
+		exit 1
+	}
+	rm -rf "$name"
+	zss "${name}.tar"
+
+	echo "✅ Done: created '${name}.tar.zst' and removed '$name/'"
+}
+
+py_ruff() {
+	for f in */; do
+		case "$f" in
+		site-packages/) continue ;;
+		esac
+		echo "Processing $f"
+		ruff format "$f"
+	done
+}
