@@ -26,7 +26,6 @@ if command -v direnv &>/dev/null; then
     eval "$(direnv hook bash 2>/dev/null)"
 fi
 
-
 # fzf
 
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/fzfrc"
@@ -43,11 +42,7 @@ if command -v fzf &>/dev/null; then
     fi
 fi
 
-
-
 export JQ_COLORS='0;33:0;33:0;33:0;33:0;32:0;39:0;39'
-
-
 
 export IPYTHONDIR="$HOME/.config/jupyter"
 export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
@@ -56,10 +51,7 @@ export JUPYTER_CONFIG_DIR="$HOME/.config/jupyter"
 export LESSHISTSIZE=1000000
 export LESSOPEN='| pygmentize -O style=one-dark %s 2>/dev/null'
 
-
-
 export MANPAGER='nvim +Man!'
-
 
 export MANPATH="$PREFIX/share/man:$HOME/.local/share/man"
 
