@@ -48,7 +48,7 @@ trr() {
 		exit 1
 	}
 	rm -rf "$name"
-	zss "${name}.tar"
+	zsd "${name}.tar"
 
 	echo "✅ Done: created '${name}.tar.zst' and removed '$name/'"
 }
