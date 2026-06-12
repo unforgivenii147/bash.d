@@ -8,10 +8,10 @@ dir() {
 	ls -lF --color=always "$PWD" | less -r
 }
 
-git_clone_master() {
+g1_master() {
 	gh repo clone "$@" -- --depth 1 --single-branch --branch master
 }
-git_clone_main() {
+g1_main() {
 	gh repo clone "$@" -- --depth 1 --single-branch --branch main
 }
 
@@ -19,7 +19,7 @@ tally() {
 	sort | uniq -c | sort -n
 }
 
-gif2jpg_with_fgmpeg() {
+gif2jpg_fgmpeg() {
 	ffmpeg -i "$@" -c vp9 -b:v 0 -crf 41 "$@".jpg
 }
 
