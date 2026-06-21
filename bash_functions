@@ -52,7 +52,7 @@ mkv2mp3() {
 }
 
 f1() {
-	find . -type f -mmin -1 -printf '%f  %s bytes\n'
+	find . -type f -mmin +10 -printf '%f  %s bytes\n'
 }
 
 f20() {
@@ -368,4 +368,422 @@ clean_log() {
 	else
 		echo "File not found."
 	fi
+}
+
+gpp() {
+	g++ -std=c++17 -Wall -Wextra -O2 -fPIE -pie "$@" -o "$@".out
+}
+
+dir() {
+	ls -lF --color=always "$PWD" | less -r
+}
+
+g1_master() {
+	gh repo clone "$@" -- --depth 1 --single-branch --branch master
+}
+g1_main() {
+	gh repo clone "$@" -- --depth 1 --single-branch --branch main
+}
+
+tally() {
+	sort | uniq -c | sort -n
+}
+
+gif2jpg_fgmpeg() {
+	ffmpeg -i "$@" -c vp9 -b:v 0 -crf 41 "$@".jpg
+}
+
+iterpy() {
+	for f in */; do
+		case "$f" in
+		site-packages/) continue ;;
+		esac
+		echo "Processing $f"
+		python -m compileall "$f"
+	done
+}
+
+trr() {
+	local name="$(basename "$PWD")"
+	local archive="../${name}.tar"
+
+	echo "Compressing '$name' into '$archive'..."
+	tar -cvf "$archive" -C .. "$name" || {
+		echo "❌ Compression failed."
+		exit 1
+	}
+
+	cd .. || {
+		echo "❌ Failed to change directory."
+		exit 1
+	}
+	rm -rf "$name"
+	zsd "${name}.tar"
+
+	echo "✅ Done: created '${name}.tar.zst' and removed '$name/'"
+}
+
+py_ruff() {
+	for f in */; do
+		case "$f" in
+		site-packages/) continue ;;
+		esac
+		echo "Processing $f"
+		ruff format "$f"
+	done
+}
+apidoc() {
+    sphinx-apidoc -o ./apidocs . "$@"
+}
+
+blk() {
+    black --verbose -t py313 -l 50 --color --pyi -x -W 8 . "$@"
+}
+
+compal() {
+    python -m compileall -r99 -j8 . "$@"
+}
+
+cppc() {
+    g++ -std=c++17 -Wall -Wextra -O2 "$@"
+}
+
+creset() {
+    printf "\e[3 q"
+}
+
+d3() {
+    du -h --max-depth=1 | sort -h
+}
+
+dff() {
+    du -d 2 -ch "$@"
+}
+
+dnhost() {
+    if [ -f ~/../usr/etc/resolv.conf ]; then
+        nvim ~/../usr/etc/resolv.conf
+    else
+        echo "Error: resolv.conf not found"
+        return 1
+    fi
+}
+
+dss() {
+    du -sh "$@"
+}
+
+du1() {
+    du -hd 1 | sort -hr
+}
+
+du2() {
+    du -h --max-depth=1 | sort -hr | head -10
+}
+
+git1() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide a repository URL"
+        return 1
+    fi
+    git clone --depth 1 --single-branch --branch main "$1"
+}
+
+git2() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide a repository URL"
+        return 1
+    fi
+    git clone --depth 1 --single-branch --branch master "$1"
+}
+
+gitdiff() {
+    git diff --ignore-all-space --ignore-space-at-eol --ignore-space-change --ignore-blank-lines -- . ':(exclude)*package-lock.json' "$@"
+}
+
+gitlink2() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide repository name"
+        return 1
+    fi
+    git remote set-url origin "https://github.com/isaac4everlast/${1}.git"
+}
+
+gitlog() {
+    git log --all --oneline --decorate --graph "$@"
+}
+
+gitpublic() {
+    gh repo edit --visibility public --accept-visibility-change-consequences "$@"
+}
+
+gitpull() {
+    git pull --depth 1 "$@"
+}
+
+gittag() {
+    git ls-remote --tags origin "$@"
+}
+
+gittagsort2() {
+    git tag -l 'v1.*' "$@"
+}
+
+gittagsort() {
+    git tag --sort=-version:refname "$@"
+}
+
+gl() {
+    git log --oneline --graph --decorate "$@"
+}
+
+gpush1() {
+    git push -u origin master "$@"
+}
+
+grc() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide repository name"
+        return 1
+    fi
+    gh repo clone "$1"
+}
+
+imjpg() {
+    fd -e webp -e bmp -e tiff -e svg -e jpeg -e png -e PNG --batchsize=33 -X magick {} {.}.jpg "$@"
+}
+
+jpeg2png() {
+    fd -e jpeg -e jpg --batchsize=33 -X magick {} {.}.png "$@"
+}
+
+jpg2png() {
+    fd -e jpg -e jpeg --batchsize=33 -X magick {} {.}.png "$@"
+}
+
+jpng() {
+    fd -e jpg -e jpeg -e JPG -e JPEG --batchsize=33 -X magick {} {.}.png "$@"
+}
+
+jpo() {
+    jpegoptim -f -o -r --strip-all --max 70 -w 8 **/*.jpg
+}
+
+lesl() {
+    ls | less
+}
+
+
+mcinet() {
+    termux-telephony-call '*100*622*0#'
+}
+
+mtn() {
+    termux-telephony-call '*555*1*4*1#'
+}
+
+pinger() {
+    ping -i 4 game.clashofclans.com
+}
+
+pingg() {
+    ping -i 3 google.com
+}
+
+pipconf() {
+    if [ -f ~/.config/pip/pip.conf ]; then
+        nano ~/.config/pip/pip.conf
+    else
+        echo "Error: pip.conf not found. Creating directory structure..."
+        mkdir -p ~/.config/pip
+        nano ~/.config/pip/pip.conf
+    fi
+}
+
+pirm() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide package name to uninstall"
+        return 1
+    fi
+    yes | python -m pip uninstall "$@"
+}
+
+pkgnames() {
+    apt search python | grep -E "^[a-zA-Z0-9]" | cut -d"/" -f1
+}
+
+pmdvlop() {
+    python -m maturin develop -v "$@"
+}
+
+png2jpg() {
+    fd -e png --batchsize=33 -X magick {} {.}.jpg
+}
+
+
+
+pp3() {
+    MATHLIB=m LDFLAGS=-lpython3.13 python -m pip install --verbose numpy
+}
+
+pp() {
+    python -m pip install --force-reinstall --upgrade "$@"
+}
+
+ppu() {
+    yes | pkg update && pkg upgrade
+}
+
+pretcss() {
+    fd -e css --batch-size=33 -X prettier -w {} "$@"
+}
+
+prethtm() {
+    fd -e htm --batch-size=33 -X prettier -w {} "$@"
+}
+
+prethtml() {
+    fd -e html --batch-size=33 -X prettier -w {} "$@"
+}
+
+pretjs() {
+    fd -e js --batch-size=33 -X prettier -w {} "$@"
+}
+
+pretjson() {
+    fd -e json --batch-size=33 -X prettier -w {} "$@"
+}
+
+pretts() {
+    fd -e ts --batch-size=33 -X prettier -w {} "$@"
+}
+
+pyup() {
+    if python setup.py sdist bdist_wheel; then
+        twine upload dist/*
+    else
+        echo "Error: Build failed"
+        return 1
+    fi
+}
+
+r() {
+    fc -s "$@"
+}
+
+rtmp() {
+    if [ -d "$PREFIX/tmp" ]; then
+        rsync -rv "$PREFIX/tmp" "$HOME/tmp"
+    else
+        echo "Error: $PREFIX/tmp not found"
+        return 1
+    fi
+}
+
+rufconf() {
+    if [ -f ~/.config/ruff/ruff.toml ]; then
+        nano ~/.config/ruff/ruff.toml
+    else
+        echo "Error: ruff.toml not found. Creating directory structure..."
+        mkdir -p ~/.config/ruff
+        nano ~/.config/ruff/ruff.toml
+    fi
+}
+
+sdist() {
+    python setup.py sdist "$@"
+}
+
+showfiles() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide package name"
+        return 1
+    fi
+    dpkg-query --listfiles "$1"
+}
+
+spb() {
+    sphinx-build -b html . _build/html "$@"
+}
+
+spbs() {
+    sphinx-build -b singlehtml . _build/singlehtml "$@"
+}
+
+svg_to_pdf() {
+    fd -e svg --batchsize=33 -X magick {} {.}.pdf "$@"
+}
+
+taplo() {
+    taplo --colors=always --verbose "$@"
+}
+
+tcal() {
+    termux-telephony-call "$@"
+}
+
+tconf() {
+    if [ -f ~/.termux/termux.properties ]; then
+        nano ~/.termux/termux.properties
+    else
+        echo "Error: termux.properties not found. Creating directory..."
+        mkdir -p ~/.termux
+        nano ~/.termux/termux.properties
+    fi
+}
+
+tlog() {
+    if [ -f ~/.tor/tor.log ]; then
+        tail ~/.tor/tor.log "$@"
+    else
+        echo "Error: tor.log not found"
+        return 1
+    fi
+}
+
+tojpg() {
+    fd -e webp -e png -e bmp -e jpeg --batchsize=33 -X magick {} {.}.jpg "$@"
+}
+
+tstart() {
+    if [ -f ~/tor.sh ]; then
+        ~/tor.sh
+    else
+        echo "Error: ~/tor.sh not found"
+        return 1
+    fi
+}
+
+tstat() {
+    pgrep -l tor
+}
+
+tstop() {
+    pkill tor
+}
+
+wifikey() {
+    grep -r '^psk=' /data/data/com.termux/files/usr/etc/NetworkManager/system-connections/ 2>/dev/null || echo "No WiFi keys found or directory not accessible"
+}
+
+xtree() {
+    find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+}
+
+youtube-mp3() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide YouTube URL"
+        return 1
+    fi
+    youtube-dl --extract-audio --audio-format mp3 "$@"
+}
+
+grh() {
+    git reset --hard
+}
+
+
+
+list_installed() {
+    dpkg-query -W -f='${Package} ${Status}  ${Version}\n'
 }
