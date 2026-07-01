@@ -582,15 +582,6 @@ rtmp() {
     fi
 }
 
-rufconf() {
-    if [ -f ~/.config/ruff/ruff.toml ]; then
-        nano ~/.config/ruff/ruff.toml
-    else
-        echo "Error: ruff.toml not found. Creating directory structure..."
-        mkdir -p ~/.config/ruff
-        nano ~/.config/ruff/ruff.toml
-    fi
-}
 
 sdist() {
     python setup.py sdist "$@"
@@ -676,9 +667,6 @@ youtube2mp3() {
     youtube-dl --extract-audio --audio-format mp3 "$@"
 }
 
-grh() {
-    git reset --hard
-}
 
 list_installed() {
     dpkg-query -W -f='${Package} ${Status}  ${Version}\n'
