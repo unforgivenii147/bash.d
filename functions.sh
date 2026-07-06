@@ -181,7 +181,6 @@ git_clone2() {
     echo "   To update later: cd $target && git fetch origin $branch"
 }
 
-
 gtop() {
     local file
     file=$(
@@ -220,8 +219,6 @@ EOF
     pwd
 }
 
-#mcd() { mkdir -p "$1" && cd "$1"; }
-
 extract_archive() {
     if [ -f "$1" ]; then
         case "$1" in
@@ -235,8 +232,7 @@ extract_archive() {
         *.tbz2) tar xjf "$1" ;;
         *.tgz) tar xzf "$1" ;;
         *.zip) unzip "$1" ;;
-        *.7z) 7z x "$1" ;;
-        *) echo "Unknown archive: $1" ;;
+        *.7z) 7z x "$1" ;; *) echo "Unknown archive: $1" ;;
         esac
     else
         echo "'$1' is not a file"
@@ -260,25 +256,6 @@ clean_log() {
     else
         echo "File not found."
     fi
-}
-
-gpp() {
-    g++ -std=c++17 -Wall -Wextra -O2 -fPIE -pie "$@" -o "$@".out
-}
-
-dir() {
-    ls -lF --color=always "$PWD" | less -r
-}
-
-g1_master() {
-    gh repo clone -- --depth 1 --single-branch --branch master "$@"
-}
-g1_main() {
-    gh repo clone -- --depth 1 "$@"
-}
-
-tally() {
-    sort | uniq -c | sort -n
 }
 
 gif2jpg_ffmpeg() {
@@ -312,8 +289,10 @@ trr() {
     rm -rf "$name"
     xzz "${name}.tar"
 
-    echo "✅ Done: created '${name}.tar.xz' and removed '$name/'"
+    echo "✅ Done: created '${name}.tar.xz' and removed '$name/'"}
+
 }
+
 tzstd() {
     local name="$(basename "$PWD")"
     local archive="../${name}.tar"
@@ -347,20 +326,8 @@ apidoc() {
     sphinx-apidoc -o ./apidocs . "$@"
 }
 
-blk() {
-    black --verbose -t py313 -l 50 --color --pyi -x -W 8 . "$@"
-}
-
-compal() {
-    python -m compileall -r99 -j8 . "$@"
-}
-
-cppc() {
-    g++ -std=c++17 -Wall -Wextra -O2 "$@"
-}
-
 creset() {
-    printf "\e[3 q"
+    printf "\e[5 q"
 }
 
 d3() {
@@ -390,22 +357,6 @@ du1() {
 
 du2() {
     du -h --max-depth=1 | sort -hr | head -10
-}
-
-git1() {
-    if [ -z "$1" ]; then
-        echo "Error: Please provide a repository URL"
-        return 1
-    fi
-    git clone --depth 1 --single-branch --branch main "$1"
-}
-
-git2() {
-    if [ -z "$1" ]; then
-        echo "Error: Please provide a repository URL"
-        return 1
-    fi
-    git clone --depth 1 --single-branch --branch master "$1"
 }
 
 gitdiff() {
@@ -460,24 +411,12 @@ grc() {
     gh repo clone "$1"
 }
 
-imjpg() {
+convert_images_to_jpg() {
     fd -e webp -e bmp -e tiff -e svg -e jpeg -e png -e PNG --batchsize=33 -X magick {} {.}.jpg "$@"
-}
-
-jpeg2png() {
-    fd -e jpeg -e jpg --batchsize=33 -X magick {} {.}.png "$@"
-}
-
-jpg2png() {
-    fd -e jpg -e jpeg --batchsize=33 -X magick {} {.}.png "$@"
 }
 
 jpng() {
     fd -e jpg -e jpeg -e JPG -e JPEG --batchsize=33 -X magick {} {.}.png "$@"
-}
-
-jpo() {
-    jpegoptim -f -o -r --strip-all --max 70 -w 8 **/*.jpg
 }
 
 lesl() {
@@ -510,14 +449,6 @@ pipconf() {
     fi
 }
 
-pirm() {
-    if [ -z "$1" ]; then
-        echo "Error: Please provide package name to uninstall"
-        return 1
-    fi
-    yes | python -m pip uninstall "$@"
-}
-
 pkgnames() {
     apt search python | grep -E "^[a-zA-Z0-9]" | cut -d"/" -f1
 }
@@ -526,14 +457,9 @@ pmdvlop() {
     python -m maturin develop -v "$@"
 }
 
-png2jpg() {
-    fd -e png --batchsize=33 -X magick {} {.}.jpg
-}
-
 pp3() {
     MATHLIB=m LDFLAGS=-lpython3.13 python -m pip install --verbose numpy
 }
-
 
 ppu() {
     yes | pkg update && pkg upgrade
@@ -562,26 +488,6 @@ pretjson() {
 pretts() {
     fd -e ts --batch-size=33 -X prettier -w {} "$@"
 }
-
-pyup() {
-    if python setup.py sdist bdist_wheel; then
-        twine upload dist/*
-    else
-        echo "Error: Build failed"
-        return 1
-    fi
-}
-
-
-rtmp() {
-    if [ -d "$PREFIX/tmp" ]; then
-        rsync -rv "$PREFIX/tmp" "$HOME/tmp"
-    else
-        echo "Error: $PREFIX/tmp not found"
-        return 1
-    fi
-}
-
 
 sdist() {
     python setup.py sdist "$@"
@@ -630,7 +536,7 @@ tlog() {
     fi
 }
 
-tojpg() {
+convert_to_jpg() {
     fd -e webp -e png -e bmp -e jpeg --batchsize=33 -X magick {} {.}.jpg "$@"
 }
 
@@ -667,7 +573,6 @@ youtube2mp3() {
     youtube-dl --extract-audio --audio-format mp3 "$@"
 }
 
-
 list_installed() {
     dpkg-query -W -f='${Package} ${Status}  ${Version}\n'
 }
@@ -689,4 +594,42 @@ trzip() {
     rm -rf "$name"
 
     echo "✅ Done: created '${name}.zip' and removed '$name/'"
+}
+
+gdepth1() {
+    local repo_url
+
+    # Determine the full URL
+    if [[ "$1" =~ ^https?:// ]]; then
+        repo_url="$1"
+    else
+        repo_url="https://github.com/$1"
+    fi
+
+    # Extract owner/repo from URL for size check
+    local repo_path=$(echo "$repo_url" | sed -E 's#https?://github\.com/##' | sed 's/\.git$//')
+
+    # Get and display repo size from GitHub API
+    echo "Fetching repository size..."
+    local size=$(curl -s "https://api.github.com/repos/$repo_path" | grep -o '"size": [0-9]*' | awk '{print $2}')
+
+    if [[ -n "$size" ]]; then
+        # Convert size from KB to MB/GB for better readability
+        if [[ $size -gt 1048576 ]]; then
+            echo "Repository size: $(echo "scale=2; $size/1048576" | bc) GB"
+        elif [[ $size -gt 1024 ]]; then
+            echo "Repository size: $(echo "scale=2; $size/1024" | bc) MB"
+        else
+            echo "Repository size: ${size} KB"
+        fi
+    else
+        echo "Could not fetch repository size (rate limit or private repo)"
+    fi
+
+    # Clone the repository
+    git clone --depth 1 "$repo_url"
+}
+
+md() {
+    mkdir -p "$@" && cd "$_"
 }

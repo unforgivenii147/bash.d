@@ -8,5 +8,3 @@ export MANPAGER="nvim +Man!"
 
 export MANPATH="/data/data/com.termux/files/usr/share/man:/data/data/com.termux/files/home/.local/share/man"
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-

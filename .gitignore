@@ -1,7 +1,1 @@
-*.env
-.env
-__pycache__/
-*.py[cod]
-*$py.class
-credential.json
-.venv/
+/data/data/com.termux/files/home/bashbin/.gitignore
