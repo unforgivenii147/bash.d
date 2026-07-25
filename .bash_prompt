@@ -1,0 +1,109 @@
+##############################
+# PS1 Configuration for Git, Venv, and Current Directory
+##############################
+
+# --- Color Reset ---
+COLOR_RESET='\[\033[0m\]'
+
+# --- Colors for Segment 1 (VENV & GIT) ---
+BG1_DARK_GRAY='48;2;50;50;50'
+FG1_YELLOW='38;2;25l15;240;45'
+FG2_CYAN_BLUE='38;2;0;135;175'
+
+# --- Colors for Segment 2 (DIRECTORY) ---
+BG2_CYAN_BLUE='48;2;0;135;175'
+FG3_WHITE='38;2;255;255;255'
+
+# --- Arrow Colors ---
+ARROW_BG1='38;2;50;50;50'
+ARROW_BG2='38;2;0;135;175'
+
+
+
+##############################################################
+# Function: Get Git Branch & Dirty Status
+##############################################################
+__git_ps1_info() {
+    local branch_info
+    branch_info=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+    if [ -n "$branch_info" ]; then
+        local status=""
+
+        # staged changes?
+        git diff --quiet --ignore-submodules --cached || status=""
+
+        # unstaged changes?
+        git diff --quiet --ignore-submodules || status="*"
+
+        echo "(${branch_info}${status})"
+    fi
+}
+
+
+
+##############################################################
+# Function: Build PS1 Prompt
+##############################################################
+__custom_ps1_builder() {
+    local PS1_STRING=""
+    local GIT_INFO=$(__git_ps1_info)
+    local VENV_NAME=""
+
+    # --- Get virtualenv name ---
+    if [ -n "$VIRTUAL_ENV" ]; then
+        VENV_NAME="($(basename "$VIRTUAL_ENV"))"
+    fi
+
+
+    ##############################
+    # SEGMENT 1: Venv + Git
+    ##############################
+    if [ -n "$VENV_NAME" ] || [ -n "$GIT_INFO" ]; then
+
+        # Segment 1 background + venv foreground
+        PS1_STRING+="\[\033[${BG1_DARK_GRAY};${FG2_CYAN_BLUE}m\]"
+
+        # Venv
+        if [ -n "$VENV_NAME" ]; then
+            PS1_STRING+=" $VENV_NAME "
+        fi
+
+        # Git info
+        if [ -n "$GIT_INFO" ]; then
+            if [ -n "$VENV_NAME" ]; then
+                # Separator inside segment
+                PS1_STRING+="\[\033[${BG1_DARK_GRAY};${FG1_YELLOW}m\] | "
+            fi
+            PS1_STRING+=" $GIT_INFO "
+        fi
+
+        # Segment 1 → Segment 2 arrow
+        PS1_STRING+="\[\033[${ARROW_BG2}m\]"
+    fi
+
+
+    ##############################
+    # SEGMENT 2: Current directory
+    ##############################
+    PS1_STRING+="\[\033[${BG2_CYAN_BLUE};${FG3_WHITE}m\]"
+    PS1_STRING+=" \W "
+
+    # End arrow (reset bg, arrow uses segment 2 fg)
+    PS1_STRING+="\[\033[49;${ARROW_BG2}m\]"
+
+
+    ##############################
+    # End + reset
+    ##############################
+    PS1_STRING+="${COLOR_RESET} \$ "
+
+    echo "$PS1_STRING"
+}
+
+
+
+##############################################################
+# PROMPT_COMMAND
+##############################################################
+PROMPT_COMMAND='PS1=$(__custom_ps1_builder)'

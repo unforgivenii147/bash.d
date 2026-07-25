@@ -1,164 +1,179 @@
 #!/bin/bash
 # find recently created files within 10 to 120minutes
+movie2mp3() {
+	if [ $# -lt 1 ]; then
+		echo "Usage: movie2mp3 <movie-file>"
+		return 1
+	fi
+
+	# Input file (quoted to handle spaces)
+	FNAME="$1"
+
+	# Remove extension and append .mp3
+	OUT="${FNAME%.*}.mp3"
+
+	# Convert using ffmpeg
+	ffmpeg -i "$FNAME" -vn -acodec libmp3lame -b:a 320k "$OUT"
+}
+
 f10() {
-  find . -type f -mmin -10 -printf '%f  %s bytes\n'
+	find . -type f -mmin -10 -printf '%f  %s bytes\n'
 }
 
 f20() {
-  find . -type f -mmin -20 -printf '%f  %s bytes\n'
+	find . -type f -mmin -20 -printf '%f  %s bytes\n'
 }
 
 f30() {
-  find . -type f -mmin -30 -printf '%f  %s bytes\n'
+	find . -type f -mmin -30 -printf '%f  %s bytes\n'
 }
 
 f40() {
-  find . -type f -mmin -40 -printf '%f  %s bytes\n'
+	find . -type f -mmin -40 -printf '%f  %s bytes\n'
 }
 
 f50() {
-  find . -type f -mmin -50 -printf '%f  %s bytes\n'
+	find . -type f -mmin -50 -printf '%f  %s bytes\n'
 }
 
 f61() {
-  find . -type f -mmin -60 -printf '%f  %s bytes\n'
+	find . -type f -mmin -60 -printf '%f  %s bytes\n'
 }
 
 f70() {
-  find . -type f -mmin -70 -printf '%f  %s bytes\n'
+	find . -type f -mmin -70 -printf '%f  %s bytes\n'
 }
 
 f80() {
-  find . -type f -mmin -80 -printf '%f  %s bytes\n'
+	find . -type f -mmin -80 -printf '%f  %s bytes\n'
 }
 
 f90() {
-  find . -type f -mmin -90 -printf '%f  %s bytes\n'
+	find . -type f -mmin -90 -printf '%f  %s bytes\n'
 }
 
 f100() {
-  find . -type f -mmin -100 -printf '%f  %s bytes\n'
+	find . -type f -mmin -100 -printf '%f  %s bytes\n'
 }
 
 f120() {
-  find . -type f -mmin -120 -printf '%f  %s bytes\n'
+	find . -type f -mmin -120 -printf '%f  %s bytes\n'
 }
 
-
 dmp2() {
-  fd --type d --empty --exec rmdir {}
+	fd --type d --empty --exec rmdir {}
 }
 
 pyempty() {
-  fd --type f --extension py --size 0B --exclude '__init__.py'
-  #    fd --type f --extension py --size 0B --exclude '__init__.py'
+	fd --type f --extension py --size 0B --exclude '__init__.py'
+	#    fd --type f --extension py --size 0B --exclude '__init__.py'
 }
 
 ex_tar() {
-  for f in *; do bash -c "cd $f && tar -xzvf *.tar.gz"; done
+	for f in *; do bash -c "cd $f && tar -xzvf *.tar.gz"; done
 }
 
 7zzz() {
-  local name="$(basename "$PWD")"
-  local archive="../${name}.7z"
+	local name="$(basename "$PWD")"
+	local archive="../${name}.7z"
 
-  echo "🗜️ Compressing '$name' into '$archive'..."
-  7z a -mx9 "$archive" "../$name" || {
-    echo "❌ Compression failed."
-    return 1
-  }
+	echo "🗜️ Compressing '$name' into '$archive'..."
+	7z a -mx9 "$archive" "../$name" || {
+		echo "❌ Compression failed."
+		return 1
+	}
 
-  #    read -p "Delete original folder '$PWD'? [y/N] " ans
-  #    [[ "$ans" =~ ^[Yy]$ ]] || {
-  #        echo "Skipped deletion."
-  #        return 0
-  #    }
+	#    read -p "Delete original folder '$PWD'? [y/N] " ans
+	#    [[ "$ans" =~ ^[Yy]$ ]] || {
+	#        echo "Skipped deletion."
+	#        return 0
+	#    }
 
-  cd .. || {
-    echo "❌ Failed to change directory."
-    return 1
-  }
+	cd .. || {
+		echo "❌ Failed to change directory."
+		return 1
+	}
 
-  rm -rf "$name"
-  echo "✅ Done: created '$archive' and removed '$name/'"
+	rm -rf "$name"
+	echo "✅ Done: created '$archive' and removed '$name/'"
 }
 
 7zippr() {
-  7z a -mx9 "../$(basename "$PWD").7z" "../$(basename "$PWD")"
+	7z a -mx9 "../$(basename "$PWD").7z" "../$(basename "$PWD")"
 }
 stree() {
-  tree -h --du | sort -hr
+	tree -h --du | sort -hr
 }
 atree() {
-  tree -d -L 2 | tail -n 1
+	tree -d -L 2 | tail -n 1
 }
 dtree() {
-  tree -d -L 2
+	tree -d -L 2
 }
 
 btree() {
-  tree -a -L 4 -h /path/to/backup | grep "GB"
+	tree -a -L 4 -h /path/to/backup | grep "GB"
 
 }
 ftree() {
-  tree -a -I "__pycache__|.git" -L 3 -h
+	tree -a -I "__pycache__|.git" -L 3 -h
 }
 
 gtree() {
-  tree -a -I "node_modules|.git|dist|build" -L 3 -h
+	tree -a -I "node_modules|.git|dist|build" -L 3 -h
 }
 
 la() {
-  ls -a
+	ls -a
 }
 lu() {
-  ls -hla
+	ls -hla
 }
 pss() {
-  ff="/sdcard/pip.txt"
-  grep "$@" "$ff"
+	ff="/sdcard/pip.txt"
+	grep "$@" "$ff"
 }
 
 mdr() {
-  mkdir -p "$@" && cd "$_"
+	mkdir -p "$@" && cd "$_"
 }
 mkdr() {
-  mkdir -p "$@" && cd "$_"
+	mkdir -p "$@" && cd "$_"
 }
 
 lj() {
-  ls -la | awk 'NR>1 && !/^d/ {printf "%s %.2f MB\n", $9, $5/1024/1024}'
+	ls -la | awk 'NR>1 && !/^d/ {printf "%s %.2f MB\n", $9, $5/1024/1024}'
 }
 
 # Function to list files and directories with human-readable sizes
 
 rmaa() {
-  read -p "Are you sure you want to delete all files except .git? [y/N]: " yn
-  if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
-    find . -mindepth 1 -not -name '.git' -not -path './.git/*' -exec rm -rf {} +
-    echo "All files except .git deleted."
-  else
-    echo "Aborted."
-  fi
+	read -p "Are you sure you want to delete all files except .git? [y/N]: " yn
+	if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
+		find . -mindepth 1 -not -name '.git' -not -path './.git/*' -exec rm -rf {} +
+		echo "All files except .git deleted."
+	else
+		echo "Aborted."
+	fi
 }
 
 # --------- C++ Programming Shortcuts ---------
 cpprun() {
-  if [ $# -eq 0 ]; then
-    echo "Usage: cpprun <file.cpp>"
-    return 1
-  fi
-  file="$1"
-  exe="${file%.cpp}"
-  g++ -std=c++17 -Wall -Wextra -O2 "$file" -o "$exe" && ./"$exe"
+	if [ $# -eq 0 ]; then
+		echo "Usage: cpprun <file.cpp>"
+		return 1
+	fi
+	file="$1"
+	exe="${file%.cpp}"
+	g++ -std=c++17 -Wall -Wextra -O2 "$file" -o "$exe" && ./"$exe"
 }
 cppnew() {
-  if [ $# -eq 0 ]; then
-    echo "Usage: cppnew <filename.cpp>"
-    return 1
-  fi
-  file="$1"
-  cat >"$file" <<'EOF'
+	if [ $# -eq 0 ]; then
+		echo "Usage: cppnew <filename.cpp>"
+		return 1
+	fi
+	file="$1"
+	cat >"$file" <<'EOF'
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -171,8 +186,8 @@ int main() {
     return 0;
 }
 EOF
-  echo "Created $file with basic C++ template"
-  nano "$file"
+	echo "Created $file with basic C++ template"
+	nano "$file"
 }
 
 # --------- Python Shortcuts ---------
@@ -180,12 +195,12 @@ EOF
 
 # Create new Python script with basic template
 pynew() {
-  if [ $# -eq 0 ]; then
-    echo "Usage: pynew <script.py>"
-    return 1
-  fi
-  file="$1"
-  cat >"$file" <<'EOF'
+	if [ $# -eq 0 ]; then
+		echo "Usage: pynew <script.py>"
+		return 1
+	fi
+	file="$1"
+	cat >"$file" <<'EOF'
 #!/usr/bin/env python3
 
 import sys
@@ -203,116 +218,116 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 EOF
-  chmod +x "$file"
-  echo "$file created"
-  #	nano "$file"
+	chmod +x "$file"
+	echo "$file created"
+	#	nano "$file"
 }
 
 g2() {
-  # Clone only the default branch (main/master/whatever) as a bare repo.
-  # Usage: mygit2 <repo-url> [target-dir]
+	# Clone only the default branch (main/master/whatever) as a bare repo.
+	# Usage: mygit2 <repo-url> [target-dir]
 
-  if [ -z "$1" ]; then
-    echo "Usage: g2 <repo-url> [target-dir]"
-    return 1
-  fi
+	if [ -z "$1" ]; then
+		echo "Usage: g2 <repo-url> [target-dir]"
+		return 1
+	fi
 
-  local url="$1"
-  local target="${2:-}"
+	local url="$1"
+	local target="${2:-}"
 
-  # Get default branch from remote (e.g. main or master)
-  local branch
-  branch=$(git ls-remote --symref "$url" HEAD 2>/dev/null | awk '/^ref:/ {print $2}' | sed 's|refs/heads/||')
+	# Get default branch from remote (e.g. main or master)
+	local branch
+	branch=$(git ls-remote --symref "$url" HEAD 2>/dev/null | awk '/^ref:/ {print $2}' | sed 's|refs/heads/||')
 
-  if [ -z "$branch" ]; then
-    echo "❌ Could not determine default branch for $url"
-    return 1
-  fi
+	if [ -z "$branch" ]; then
+		echo "❌ Could not determine default branch for $url"
+		return 1
+	fi
 
-  # Derive repo name if no custom folder name given
-  local repo
-  repo=$(basename "$url" .git)
+	# Derive repo name if no custom folder name given
+	local repo
+	repo=$(basename "$url" .git)
 
-  # Determine target directory
-  if [ -z "$target" ]; then
-    target="${repo}.git"
-  fi
+	# Determine target directory
+	if [ -z "$target" ]; then
+		target="${repo}.git"
+	fi
 
-  echo "🔍 Default branch: $branch"
-  echo "📦 Cloning only '$branch' from $url into $target ..."
-  git clone --single-branch --branch "$branch" --bare "$url" "$target" || return 1
+	echo "🔍 Default branch: $branch"
+	echo "📦 Cloning only '$branch' from $url into $target ..."
+	git clone --single-branch --branch "$branch" --bare "$url" "$target" || return 1
 
-  echo "✅ Done!"
-  echo "   To update later: cd $target && git fetch origin $branch"
+	echo "✅ Done!"
+	echo "   To update later: cd $target && git fetch origin $branch"
 }
 
 trr() {
-  local name="$(basename "$PWD")"
-  local archive="../${name}.tar"
+	local name="$(basename "$PWD")"
+	local archive="../${name}.tar"
 
-  echo "🗜️ Compressing '$name' into '$archive'..."
-  tar -cf "$archive" -C .. "$name" || {
-    echo "❌ Compression failed."
-    return 1
-  }
+	echo "🗜️ Compressing '$name' into '$archive'..."
+	tar -cf "$archive" -C .. "$name" || {
+		echo "❌ Compression failed."
+		return 1
+	}
 
-  # Optional deletion (currently commented out)
-  # read -p "Delete original folder '$PWD'? [y/N] " ans
-  # [[ "$ans" =~ ^[Yy]$ ]] || {
-  #     echo "Skipped deletion."
-  #     return 0
-  # }
+	# Optional deletion (currently commented out)
+	# read -p "Delete original folder '$PWD'? [y/N] " ans
+	# [[ "$ans" =~ ^[Yy]$ ]] || {
+	#     echo "Skipped deletion."
+	#     return 0
+	# }
 
-  cd .. || {
-    echo "❌ Failed to change directory."
-    return 1
-  }
+	cd .. || {
+		echo "❌ Failed to change directory."
+		return 1
+	}
 
-  rm -rf "$name"
-  echo "✅ Done: created '$archive' and removed '$name/'"
+	rm -rf "$name"
+	echo "✅ Done: created '$archive' and removed '$name/'"
 }
 
 txz() {
-  local name="$(basename "$PWD")"
-  local archive="../${name}.tar.xz"
+	local name="$(basename "$PWD")"
+	local archive="../${name}.tar.xz"
 
-  echo "🗜️ Compressing '$name' into '$archive' (xz -e -9)..."
-  tar -c --xz -I "xz -e -9" -f "$archive" -C .. "$name" || {
-    echo "❌ Compression failed."
-    return 1
-  }
+	echo "🗜️ Compressing '$name' into '$archive' (xz -e -9)..."
+	tar -c --xz -I "xz -e -9" -f "$archive" -C .. "$name" || {
+		echo "❌ Compression failed."
+		return 1
+	}
 
-  # Optional deletion (currently commented out)
-  # read -p "Delete original folder '$PWD'? [y/N] " ans
-  # [[ "$ans" =~ ^[Yy]$ ]] || {
-  #     echo "Skipped deletion."
-  #     return 0
-  # }
+	# Optional deletion (currently commented out)
+	# read -p "Delete original folder '$PWD'? [y/N] " ans
+	# [[ "$ans" =~ ^[Yy]$ ]] || {
+	#     echo "Skipped deletion."
+	#     return 0
+	# }
 
-  cd .. || {
-    echo "❌ Failed to change directory."
-    return 1
-  }
+	cd .. || {
+		echo "❌ Failed to change directory."
+		return 1
+	}
 
-  rm -rf "$name"
-  echo "✅ Done: created '$archive' and removed '$name/'"
+	rm -rf "$name"
+	echo "✅ Done: created '$archive' and removed '$name/'"
 }
 
-
 7zx() {
-  local file
-  for file in *; do
-    # Only regular files that 7z can handle
-    if [[ -f "$file" ]] && 7z l "$file" >/dev/null 2>&1; then
-      echo "=== Extracting: $file ==="
-      7z x "$file" -y # -y = assume Yes on all queries
-    fi
-  done
+	local file
+	for file in *; do
+		# Only regular files that 7z can handle
+		if [[ -f "$file" ]] && 7z l "$file" >/dev/null 2>&1; then
+			echo "=== Extracting: $file ==="
+			7z x "$file" -y # -y = assume Yes on all queries
+		fi
+	done
 }
 
 gtop() {
-  local file
-  file=$(python3 - << 'EOF'
+	local file
+	file=$(
+		python3 - <<'EOF'
 import os
 from pathlib import Path
 
@@ -331,47 +346,51 @@ for p in start.rglob("*"):
 if largest:
     print(largest[0])
 EOF
-  )
+	)
 
-  if [ -z "$file" ]; then
-    echo "No files found."
-    return 1
-  fi
+	if [ -z "$file" ]; then
+		echo "No files found."
+		return 1
+	fi
 
-  echo "Largest file: $file"
-  local dir
-  dir=$(dirname "$file")
-  echo "Directory: $dir"
+	echo "Largest file: $file"
+	local dir
+	dir=$(dirname "$file")
+	echo "Directory: $dir"
 
-  cd "$dir" || return
-  pwd
+	cd "$dir" || return
+	pwd
 }
 
 mcd() { mkdir -p "$1" && cd "$1"; }
 
 extract() {
-  if [ -f "$1" ] ; then
-    case "$1" in
-      *.tar.bz2) tar xjf "$1" ;;
-      *.tar.gz)  tar xzf "$1" ;;
-      *.tar.xz)  tar -xJf "$1" ;;
-      *.bz2)     bunzip2 "$1" ;;
-      *.rar)     unrar x "$1" ;;
-      *.gz)      gunzip "$1" ;;
-      *.tar)     tar xf "$1" ;;
-      *.tbz2)    tar xjf "$1" ;;
-      *.tgz)     tar xzf "$1" ;;
-      *.zip)     unzip "$1" ;;
-      *.7z)      7z x "$1" ;;
-      *) echo "Unknown archive: $1" ;;
-    esac
-  else
-    echo "'$1' is not a file"
-  fi
+	if [ -f "$1" ]; then
+		case "$1" in
+		*.tar.bz2) tar xjf "$1" ;;
+		*.tar.gz) tar xzf "$1" ;;
+		*.tar.xz) tar -xJf "$1" ;;
+		*.bz2) bunzip2 "$1" ;;
+		*.rar) unrar x "$1" ;;
+		*.gz) gunzip "$1" ;;
+		*.tar) tar xf "$1" ;;
+		*.tbz2) tar xjf "$1" ;;
+		*.tgz) tar xzf "$1" ;;
+		*.zip) unzip "$1" ;;
+		*.7z) 7z x "$1" ;;
+		*) echo "Unknown archive: $1" ;;
+		esac
+	else
+		echo "'$1' is not a file"
+	fi
 }
 dowhl() {
-  for f in *;do bash -c "cd $f && unzip *.whl && rm -v *.whl";done
+	for f in *; do bash -c "cd $f && unzip *.whl && rm -v *.whl"; done
 }
 dowhl2() {
-  for f in *;do bash -c "cd $f && ww && rm -rf *";done
+	for f in *; do bash -c "cd $f && ww && rm -rf *"; done
+}
+
+pipallwhl() {
+	for f in *.whl; do python -m pip install --no-deps $f; done
 }
