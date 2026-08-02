@@ -1,9 +1,7 @@
 #!/bin/sh
-
+alias optipng="optipng 2>/dev/null"
 alias maturin="maturin 2>/dev/null"
-alias fd='fd 2>/dev/null'
 alias fd="fd --hidden --no-ignore"
-alias fdu='fd 2>/dev/null --hidden --no-ignore'
 alias rg="rg 2>/dev/null"
 alias npm="npm --verbose"
 
