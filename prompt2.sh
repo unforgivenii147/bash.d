@@ -1,4 +1,4 @@
-#Clone this repository at &lt;script src=&quot;https://gist.github.com/miki725/9783474.js&quot;&gt;&lt;/script&gt;
+#Clone this repository at <script src="https://gist.github.com/miki725/9783474.js"></script>
 #<script src="https://gist.github.com/miki725/9783474.js"></script>
 #!/bin/bash
 #

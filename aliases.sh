@@ -1,4 +1,6 @@
 #!/bin/sh
+alias book='cd /sdcard/book'
+alias dh2="cd ~/isaac/pkgs/dh2/src/dh2"
 alias optipng="optipng 2>/dev/null"
 alias maturin="maturin 2>/dev/null"
 alias fd="fd --hidden --no-ignore"
