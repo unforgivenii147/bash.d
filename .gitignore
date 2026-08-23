@@ -4,7 +4,6 @@ token.json
 *.pyc
 *.pyo
 __pycache__/
-
 # Distribution / Packaging
 *.egg
 *.egg-info/
