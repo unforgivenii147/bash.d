@@ -418,7 +418,7 @@ jpng() {
 	fd -e jpg -e jpeg -e JPG -e JPEG --batchsize=33 -X magick {} {.}.png "$@"
 }
 
-lesl() {
+lss() {
 	ls | less
 }
 
@@ -452,12 +452,9 @@ pkgnames() {
 	apt search python | grep -E "^[a-zA-Z0-9]" | cut -d"/" -f1
 }
 
-pmdvlop() {
-	python -m maturin develop -v "$@"
-}
 
 pp3() {
-	MATHLIB=m LDFLAGS=-lpython3.13 python -m pip install --verbose numpy
+	MATHLIB=m LDFLAGS=-lpython3.12 python -m pip install --verbose numpy
 }
 
 ppu() {
